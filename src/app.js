@@ -23,9 +23,26 @@ const findRepository = (request, response, next) => {
 
 const repositories = [];
 
+/**
+ * Index
+ * Return a list of repositories
+ */
 app.get("/repositories", (request, response) => {
+  
+  const {title} = request.query
+
+  if (title){
+    filteredRepositories = repositories.filter(repository => repository.title.includes(title))
+    return response.status(200).json(filteredRepositories)
+  }
+  
   return response.status(200).json(repositories)
 });
+
+/**
+ * Create
+ * Add a new repository
+ */
 
 app.post("/repositories", (request, response) => {
   const {title, url, techs} = request.body;
@@ -43,6 +60,11 @@ app.post("/repositories", (request, response) => {
   return response.status(201).json(repository)
 
 });
+
+/**
+ * Update
+ * Update a repository
+ */
 
 app.put("/repositories/:id", findRepository, (request, response) => {
   
@@ -64,6 +86,11 @@ app.put("/repositories/:id", findRepository, (request, response) => {
   return response.status(200).json(updatedRepository)
 });
 
+/**
+ * Delete
+ * Delete a repository
+ */
+
 app.delete("/repositories/:id", findRepository, (request, response) => {
   
   const {id} = request.params
@@ -75,6 +102,11 @@ app.delete("/repositories/:id", findRepository, (request, response) => {
   return response.status(204).send()
 
 });
+
+/**
+ * Add Like
+ * Add "like" to repository
+ */
 
 app.post("/repositories/:id/like", findRepository, (request, response) => {
 
